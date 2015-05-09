@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing;
 use Symfony\Component\HttpKernel;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use Symfony\Component\HttpKernel\HttpCache\Store;
 
 function render_template($request)
 {
@@ -30,8 +32,8 @@ $dispatcher = new EventDispatcher();
 // $dispatcher->addListener('response', array(new Symbox\ContentTypeListener(), 'onResponse'), -255);
 // subscribers more flexibility
 $dispatcher->addSubscriber(new Symbox\ContentTypeListener());
+$dispatcher->addSubscriber(new Symbox\CacheListener());
 
 $framework = new Symbox\Framework($matcher, $resolver, $dispatcher);
-$response = $framework->handle($request);
- 
-$response->send();
+$framework = new HttpCache($framework, new Store(__DIR__.'/../cache'), null, ['debug' => true]);
+$framework->handle($request)->send();
