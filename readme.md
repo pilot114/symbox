@@ -11,3 +11,4 @@ http://fabien.potencier.org/article/50/create-your-own-framework-on-top-of-the-s
 3. Routing + Use Composer autoloader + Config + add 5xx catch
 4. Controllers
 5. HTTP Kernel
+6. Reusable structure
