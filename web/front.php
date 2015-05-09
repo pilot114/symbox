@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing;
 use Symfony\Component\HttpKernel;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 function render_template($request)
 {
@@ -24,7 +25,13 @@ $context->fromRequest($request);
 $matcher = new Routing\Matcher\UrlMatcher($routes, $context);
 $resolver = new HttpKernel\Controller\ControllerResolver();
 
-$framework = new Symbox\Framework($matcher, $resolver);
+$dispatcher = new EventDispatcher();
+// listener hardcode priority
+// $dispatcher->addListener('response', array(new Symbox\ContentTypeListener(), 'onResponse'), -255);
+// subscribers more flexibility
+$dispatcher->addSubscriber(new Symbox\ContentTypeListener());
+
+$framework = new Symbox\Framework($matcher, $resolver, $dispatcher);
 $response = $framework->handle($request);
  
 $response->send();

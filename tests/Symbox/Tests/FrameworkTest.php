@@ -39,7 +39,9 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase
             )))
         ;
         $resolver = new ControllerResolver();
-        $framework = new Framework($matcher, $resolver);
+        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+
+        $framework = new Framework($matcher, $resolver, $dispatcher);
         $response = $framework->handle(new Request());
      
         $this->assertEquals(200, $response->getStatusCode());
@@ -55,8 +57,9 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException($exception))
         ;
         $resolver = $this->getMock('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface');
+        $dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
  
-        return new Framework($matcher, $resolver);
+        return new Framework($matcher, $resolver, $dispatcher);
     }
 }
  

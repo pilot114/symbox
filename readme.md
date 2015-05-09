@@ -17,3 +17,4 @@ http://fabien.potencier.org/article/50/create-your-own-framework-on-top-of-the-s
 5. HTTP Kernel
 6. Reusable structure
 7. Tests
+8. Events
