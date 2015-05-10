@@ -2,8 +2,9 @@
 http://fabien.potencier.org/article/50/create-your-own-framework-on-top-of-the-symfony2-components-part-1
 
 Каждый коммит сооответствует одной из статей (начиная со второй).
-Посмотреть изменения на любом шаге можно Git командой:
+Посмотреть список коммитов и изменения на любом шаге можно Git командами:
 
+	git log
 	git diff --name-only SHA1 SHA2
 
 Запустить тесты с генерацией отчета о покрытии кода:
@@ -19,3 +20,4 @@ http://fabien.potencier.org/article/50/create-your-own-framework-on-top-of-the-s
 7. Tests
 8. Events
 9. Cashing
+10. Add standart events

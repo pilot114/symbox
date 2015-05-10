@@ -7,33 +7,20 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing;
 use Symfony\Component\HttpKernel;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\HttpKernel\HttpCache\HttpCache;
-use Symfony\Component\HttpKernel\HttpCache\Store;
-
-function render_template($request)
-{
-    extract($request->attributes->all(), EXTR_SKIP);
-    ob_start();
-    include sprintf(__DIR__.'/../src/pages/%s.php', $_route);
- 
-    return new Response(ob_get_clean());
-}
 
 $request = Request::createFromGlobals();
 $routes = include __DIR__.'/../src/app.php';
 
 $context = new Routing\RequestContext();
-$context->fromRequest($request);
 $matcher = new Routing\Matcher\UrlMatcher($routes, $context);
 $resolver = new HttpKernel\Controller\ControllerResolver();
 
 $dispatcher = new EventDispatcher();
-// listener hardcode priority
-// $dispatcher->addListener('response', array(new Symbox\ContentTypeListener(), 'onResponse'), -255);
-// subscribers more flexibility
-$dispatcher->addSubscriber(new Symbox\ContentTypeListener());
-$dispatcher->addSubscriber(new Symbox\CacheListener());
+$dispatcher->addSubscriber(new HttpKernel\EventListener\RouterListener($matcher));
 
-$framework = new Symbox\Framework($matcher, $resolver, $dispatcher);
-$framework = new HttpCache($framework, new Store(__DIR__.'/../cache'), null, ['debug' => true]);
+$listener = new HttpKernel\EventListener\ExceptionListener('Calendar\\Controller\\ErrorController::exceptionAction');
+$dispatcher->addSubscriber($listener);
+$dispatcher->addSubscriber(new Symbox\StringResponseListener());
+
+$framework = new Symbox\Framework($dispatcher, $resolver);
 $framework->handle($request)->send();
