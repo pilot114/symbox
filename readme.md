@@ -21,3 +21,4 @@ http://fabien.potencier.org/article/50/create-your-own-framework-on-top-of-the-s
 8. Events
 9. Cashing
 10. Add standart events
+11. Dependency injection
