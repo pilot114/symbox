@@ -8,6 +8,6 @@
         "symfony/dependency-injection": "2.1.*"
     },
     "autoload": {
-        "psr-0": { "Symbox": "src/", "Calendar": "src/" }
+        "psr-0": { "Symbox": "src/", "App": "src/" }
     }
 }
